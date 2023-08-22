@@ -1,3 +1,24 @@
+#################################
+# CREATE A SECRET CONFIGURATION #
+#################################
+
+# This is useful for connectors that need API keys, DB password, etc.
+# Here "charizard" is our secret value.
+# It is created here to have a working example, but don't actually store them as clear text in your Git.
+
+resource "google_secret_manager_secret" "secret_pokemon" {
+  secret_id = "pokemon_name"
+
+  replication {
+    automatic = true
+  }
+}
+
+resource "google_secret_manager_secret_version" "secret_pokemon_version" {
+  secret      = google_secret_manager_secret.secret_pokemon.id
+  secret_data = "charizard"
+}
+
 # Before applying this configuration, you will first need to deploy an Airbyte on Google Compute Engine: https://docs.airbyte.com/deploying-airbyte/on-gcp-compute-engine/
 # Then create a SSH connection to the VM where your Airbyte instance is deployed:
 # `gcloud --project=<GCP_PROJECT_ID> compute ssh <AIRBYTE_VM_NAME> -- -L 8000:localhost:8000 -N -f`
@@ -25,13 +46,35 @@ module "airbyte_flows" {
   project_id                    = local.project_id
   airbyte_service_account_email = local.airbyte_service_account
 
-  flows_configuration = yamldecode(file("./flows.yaml"))
+  flows_configuration = {
+    pokeapi_to_bigquery = {
+      flow_name   = "PokeAPI to bigquery"
+      source_name = "PokeAPI"
+
+      tables_to_sync = {
+        pokemon = {
+          sync_mode             = "full_refresh"
+          destination_sync_mode = "overwrite"
+        }
+      }
+
+      source_specification = {
+        pokemon_name = "secret:pokemon_name" # use this "secret:<secret_name>" name to tell the module to fetch the secret value.
+      }
+
+      destination_specification = {
+        dataset_name        = google_bigquery_dataset.pokemon_dataset.dataset_id
+        dataset_location    = google_bigquery_dataset.pokemon_dataset.location
+        staging_bucket_name = google_storage_bucket.pokemon_bucket.name
+      }
+    }
+  }
+  depends_on = [google_secret_manager_secret_version.secret_pokemon_version]
 }
 
 #################################
 # CONFIGURE TERRAFORM PROVIDERS #
 #################################
-
 terraform {
   required_providers {
     google = {
@@ -59,9 +102,9 @@ provider "airbyte" {
 }
 
 
-##############################################################
-# CREATE A STAGING BUCKET AND AUTHORIZE AIRBYTE TO ACCESS IT #
-##############################################################
+################################################################
+# CREATE GCS STAGING BUCKET AND AUTHORIZE AIRBYTE TO ACCESS IT #
+################################################################
 resource "google_storage_bucket" "pokemon_bucket" {
   name     = local.staging_bucket
   location = local.data_location
@@ -74,9 +117,9 @@ resource "google_bigquery_dataset_iam_member" "editor" {
 }
 
 
-################################################################
-# CREATE A BIGQUERY DATASET AND AUTHORIZE AIRBYTE TO ACCESS IT #
-#################################11#############################
+##############################################################
+# CREATE BIGQUERY DATASET AND AUTHORIZE AIRBYTE TO ACCESS IT #
+##############################################################
 resource "google_bigquery_dataset" "pokemon_dataset" {
   dataset_id = local.destination_dataset
   location   = local.data_location

@@ -5,7 +5,7 @@ variable "project_id" {
 
 variable "airbyte_service_account_email" {
   type        = string
-  description = "Email address of the service account used by Airbyte"
+  description = "Email address of the service account used by the Airbyte VM"
 }
 
 variable "flows_configuration" {
