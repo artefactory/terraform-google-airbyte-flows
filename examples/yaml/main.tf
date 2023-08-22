@@ -16,17 +16,12 @@ provider "airbyte" {
   }
 }
 
-resource "airbyte_workspace" "main" {
-  name = "main_workspace"
-}
-
 module "airbyte_flows" {
   source  = "artefactory/airbyte-flows/google"
   version = "~> 0"
 
   project_id                    = "<GCP_PROJECT_ID>"
   airbyte_service_account_email = "<AIRBYTE_INSTANCE_SERVICE_ACCOUNT_EMAIL>"
-  airbyte_workspace             = airbyte_workspace.main.id
 
   flows_configuration = yamldecode(file("./flows.yaml"))
 }

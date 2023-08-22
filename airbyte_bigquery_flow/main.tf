@@ -1,3 +1,5 @@
+data "airbyte_workspace_ids" "workspaces" {}
+
 resource "google_storage_hmac_key" "hmac_key" {
   project               = var.project_id
   service_account_email = var.airbyte_service_account_email
@@ -17,11 +19,13 @@ locals {
     for key, value in var.flow_configuration.source_specification :
     key => length(regexall("secret:", value)) > 0 ? data.google_secret_manager_secret_version.source_configuration_secret[key].secret_data : value
   }
+
+  airbyte_workspace = data.airbyte_workspace_ids.workspaces.ids.0
 }
 
 resource "airbyte_source_definition" "custom_source" {
   count             = var.flow_configuration.custom_source == null ? 0 : 1
-  workspace_id      = var.airbyte_workspace
+  workspace_id      = local.airbyte_workspace
   name              = var.flow_configuration.source_name
   docker_repository = var.flow_configuration.custom_source.docker_repository
   docker_image_tag  = var.flow_configuration.custom_source.docker_image_tag
@@ -29,14 +33,14 @@ resource "airbyte_source_definition" "custom_source" {
 }
 
 resource "airbyte_source" "source" {
-  workspace_id             = var.airbyte_workspace
+  workspace_id             = local.airbyte_workspace
   definition_id            = var.flow_configuration.custom_source == null ? var.flow_configuration.source_catalog_entry.0.sourceDefinitionId : airbyte_source_definition.custom_source.0.id
   name                     = var.flow_configuration.flow_name
   connection_configuration = jsonencode(local.rendered_source_specification)
 }
 
 resource "airbyte_destination" "bigquery_destination" {
-  workspace_id  = var.airbyte_workspace
+  workspace_id  = local.airbyte_workspace
   definition_id = "22f6c74f-5699-40ff-833c-4a879ea40133"
   name          = var.flow_configuration.flow_name
   connection_configuration = jsonencode({
@@ -107,7 +111,7 @@ resource "airbyte_connection" "connection" {
 
 resource "airbyte_operation" "normalization" {
   count                = var.flow_configuration.normalize ? 1 : 0
-  workspace_id         = var.airbyte_workspace
+  workspace_id         = local.airbyte_workspace
   name                 = "normalization_operation"
   operator_type        = "normalization"
   normalization_option = "basic"

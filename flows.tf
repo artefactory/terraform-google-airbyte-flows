@@ -7,7 +7,6 @@ module "salesforce_bigquery_flow" {
   for_each = var.flows_configuration
 
   project_id                    = var.project_id
-  airbyte_workspace             = var.airbyte_workspace
   airbyte_service_account_email = var.airbyte_service_account_email
 
 

@@ -3,11 +3,6 @@ variable "project_id" {
   description = "GCP project id in which the existing Airbyte instance resides"
 }
 
-variable "airbyte_workspace" {
-  type        = string
-  description = "Airbyte workspace ID"
-}
-
 variable "airbyte_service_account_email" {
   type        = string
   description = "Email address of the service account used by Airbyte"
