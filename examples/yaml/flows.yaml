@@ -1,0 +1,23 @@
+salesforce_to_bigquery:
+  flow_name: Salesforce Bigquery
+  source_name: salesforce
+  tables_to_sync:
+    Opportunity:
+      sync_mode: incremental
+      destination_sync_mode: append_dedup
+    Region__c:
+      sync_mode: incremental
+      destination_sync_mode: append_dedup
+    User:
+      sync_mode: incremental
+      destination_sync_mode: append_dedup
+
+  source_specification:
+    client_id: secret:client_id
+    client_secret: secret:client_secret
+    refresh_token: secret:refresh_token
+
+  destination_specification:
+    dataset_name: lz_bq_salesforce
+    dataset_location: EU
+    staging_bucket_name: lz-gcs-salesforce-f9mv9z
