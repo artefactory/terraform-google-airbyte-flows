@@ -1,6 +1,8 @@
 /*
 * # terraform-google-airbyte-flows
+*
 * A Terraform module to programmatically deploy end-to-end ELT flows to BigQuery on Airbyte.
+* Supports custom sources and integrates with the secret manager to securely store sensitive configurations. Also allows you to specify flows as YAML.
 *
 * ## Prerequisites
 *
