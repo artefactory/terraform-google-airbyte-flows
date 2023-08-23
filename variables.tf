@@ -9,6 +9,7 @@ variable "airbyte_service_account_email" {
 }
 
 variable "flows_configuration" {
+  description = "Definition of all the flows to Bigquery that will be Terraformed to your Airbyte instance"
   type = map(object({
     flow_name   = string
     source_name = string

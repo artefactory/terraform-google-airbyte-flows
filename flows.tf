@@ -2,7 +2,7 @@ data "http" "connectors_catalog" {
   url = "https://connectors.airbyte.com/files/registries/v0/oss_registry.json"
 }
 
-module "salesforce_bigquery_flow" {
+module "airbyte_bigquery_flow" {
   source   = "./airbyte_bigquery_flow"
   for_each = var.flows_configuration
 
