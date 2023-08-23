@@ -1,0 +1,11 @@
+site_name: Terraform GCP Airbyte Flows
+repo_name: artefactory/terraform-google-airbyte-flows
+repo_url: https://github.com/artefactory/terraform-google-airbyte-flows
+
+plugins:
+  - techdocs-core
+
+nav:
+  - Home: index.md
+  - Guides:
+    - Getting started: getting_started.md
