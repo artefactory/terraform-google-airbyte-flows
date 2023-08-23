@@ -89,12 +89,11 @@ resource "google_storage_bucket" "pokemon_bucket" {
   location = local.data_location
 }
 
-resource "google_bigquery_dataset_iam_member" "editor" {
-  dataset_id = google_bigquery_dataset.pokemon_dataset.dataset_id
-  role       = "roles/bigquery.dataEditor"
-  member     = "serviceAccount:${local.airbyte_service_account}"
+resource "google_storage_bucket_iam_member" "member" {
+  bucket = google_storage_bucket.pokemon_bucket.name
+  role   = "roles/storage.admin"
+  member = "serviceAccount:${local.airbyte_service_account}"
 }
-
 
 ################################################################
 # CREATE A BIGQUERY DATASET AND AUTHORIZE AIRBYTE TO ACCESS IT #
@@ -104,8 +103,8 @@ resource "google_bigquery_dataset" "pokemon_dataset" {
   location   = local.data_location
 }
 
-resource "google_storage_bucket_iam_member" "member" {
-  bucket = google_storage_bucket.pokemon_bucket.name
-  role   = "roles/storage.admin"
-  member = "serviceAccount:${local.airbyte_service_account}"
+resource "google_bigquery_dataset_iam_member" "editor" {
+  dataset_id = google_bigquery_dataset.pokemon_dataset.dataset_id
+  role       = "roles/bigquery.dataEditor"
+  member     = "serviceAccount:${local.airbyte_service_account}"
 }

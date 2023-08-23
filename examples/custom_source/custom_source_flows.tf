@@ -25,7 +25,33 @@ module "airbyte_flows" {
   project_id                    = local.project_id
   airbyte_service_account_email = local.airbyte_service_account
 
-  flows_configuration = yamldecode(file("./flows.yaml"))
+  flows_configuration = {
+    napta_to_bigquery = {
+      flow_name   = "Napta to bigquery"
+      source_name = "napta"
+
+      custom_source = {
+        docker_repository = "samitaaissat/source-napta"
+        docker_image_tag  = "0.7.4"
+        documentation_url = "https://github.com/artefactory/airbyte-napta-source"
+      }
+
+      tables_to_sync = {
+        business_unit = {}
+      }
+
+      source_specification = {
+        client_id     = "secret:napta_client_id"
+        client_secret = "secret:napta_client_secret"
+      }
+
+      destination_specification = {
+        dataset_name        = google_bigquery_dataset.destination_dataset.dataset_id
+        dataset_location    = google_bigquery_dataset.destination_dataset.location
+        staging_bucket_name = google_storage_bucket.destination_bucket.name
+      }
+    }
+  }
 }
 
 #################################
