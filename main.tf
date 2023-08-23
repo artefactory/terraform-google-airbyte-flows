@@ -12,19 +12,19 @@
 *
 * ## Usage
 *
-* ### [Basic configuration example](./examples/basic/basic_flows.tf)
+* ### [Basic configuration example](https://github.com/artefactory/terraform-google-airbyte-flows/blob/main/examples/basic/basic_flows.tf)
 *
 * Get started with the module through a minimal flow example.
 *
-* ### [Configuration example with secrets](./examples/secret/flows_with_secrets.tf)
+* ### [Configuration example with secrets](https://github.com/artefactory/terraform-google-airbyte-flows/blob/main/examples/secret/flows_with_secrets.tf)
 *
 * Most sources need to be configured with secrets (DB passwords, API keys, tokens, etc...). This example shows how to configure the module to fetch secret values from the GCP secret manager to avoid hard coding them in your configuration.
 *
-* ### [Configuration example for a custom source](./examples/custom_source/custom_source_flows.tf)
+* ### [Configuration example for a custom source](https://github.com/artefactory/terraform-google-airbyte-flows/blob/main/examples/custom_source/custom_source_flows.tf)
 *
 * If the source you want to integrate is not in the Airbyte catalog, you can [create a custom connector](https://docs.airbyte.com/connector-development/) and use it in the module.
 *
-* ### [YAML configuration example](./examples/yaml/yaml_defined_flows.tf)
+* ### [YAML configuration example](https://github.com/artefactory/terraform-google-airbyte-flows/blob/main/examples/yaml/yaml_defined_flows.tf)
 *
 * This module is designed to be compatible with external YAML configuration files. It is a convenient way for users not proficient in Terraform to specify/modify ELT pipelines programmatically, or to integrate this module with other tools that can generate YAML files.
 *

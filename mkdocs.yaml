@@ -7,5 +7,3 @@ plugins:
 
 nav:
   - Home: index.md
-  - Guides:
-    - Getting started: getting_started.md

@@ -17,4 +17,4 @@ metadata:
 spec:
   type: service
   owner: user:AlexisVLRT
-  lifecycle: production
+  lifecycle: experimental
