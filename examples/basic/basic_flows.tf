@@ -25,6 +25,7 @@ module "airbyte_flows" {
   project_id                    = local.project_id
   airbyte_service_account_email = local.airbyte_service_account
 
+  # Consult the reference for more info on how this variable can be used: https://github.com/artefactory/terraform-google-airbyte-flows/blob/0.1.4/docs/flow_configuration_reference.md
   flows_configuration = {
     pokeapi_to_bigquery = {
       flow_name   = "PokeAPI to bigquery"
