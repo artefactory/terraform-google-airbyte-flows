@@ -1,9 +1,3 @@
----
-hide:
-  - navigation
-  - toc
----
-
 This module will help you programmatically deploy end-to-end ELT flows to BigQuery on Airbyte.
 
 It supports custom sources and integrates with the secret manager to securely store sensitive configurations. Also allows you to specify flows as YAML.

@@ -7,3 +7,4 @@ plugins:
 
 nav:
   - Home: index.md
+  - flow_configuration reference: flow_configuration_reference.md
