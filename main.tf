@@ -24,6 +24,10 @@
 *
 * If the source you want to integrate is not in the Airbyte catalog, you can [create a custom connector](https://docs.airbyte.com/connector-development/) and use it in the module.
 *
+* ### [Scheduled flow configuration example](https://github.com/artefactory/terraform-google-airbyte-flows/blob/main/examples/scheduled_flow/scheduled_flows.tf.tf)
+*
+* You can set your ELT pipelines to run on a cron schedule by setting `cron_schedule` and optionally `cron_timezone`.
+*
 * ### [YAML configuration example](https://github.com/artefactory/terraform-google-airbyte-flows/blob/main/examples/yaml/yaml_defined_flows.tf)
 *
 * This module is designed to be compatible with external YAML configuration files. It is a convenient way for users not proficient in Terraform to specify/modify ELT pipelines programmatically, or to integrate this module with other tools that can generate YAML files.
